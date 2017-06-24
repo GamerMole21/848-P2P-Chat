@@ -6,7 +6,11 @@ dialog --title "848 P2P Chat Installer" --clear --msgbox "First we will update t
 clear
 sudo apt update
 clear
-sudo apt install pyqt4-dev-tools python-qt4 python3-qt4 qt-designer git
+sudo apt install pyqt4-dev-tools
+sudo apt install python-qt4
+sudo apt install python3-qt4
+sudo apt install qt-designer
+sudo apt install git
 cd ~
 cd "$installdir" || {
 dialog --title "848 P2P Chat Installer" --clear --msgbox "Cloning from GitHub..." 16 51
