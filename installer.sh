@@ -19,6 +19,7 @@ git clone https://github.com/GamerMole21/848-P2P-Chat.git
 cd 848-P2P-Chat
 chmod +x chat4.py
 dialog --title "848 P2P Chat Installer" --msgbox "848 P2P Chat successfully installed." 16 51
+./chat4.py &
 exit
 }
 dialog --title "848 P2P Chat Installer" --msgbox "848 P2P Chat was already installed."
