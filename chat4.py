@@ -15,6 +15,7 @@ import threading
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 text = ''
+mode = ''
 name = 'You'
 rname = 'Them'
 
@@ -24,14 +25,33 @@ def update_list(self, user, data):
 def incomingLoop(self, s):
     while True:
         data = s.recv(100).decode()
-        update_list(self, rname, data)
+        if data.find("name=") == 1:
+            global rname
+            rname = data.replace("name=", '')
+            rname = rname.replace("\r\n", '')
+
+        elif data.find("**clear") == 1:
+            clear_chat()
+
+        else:
+            update_list(self, rname, data)
 
 def readSocketAndOutput(s):
     while True:
         try:
             text = s.recv(100).decode()
             #self.recieveMSG()
-            self.listWidget.addItem(rname + ": " + text)
+            #self.listWidget.addItem(rname + ": " + text)
+            if data.find("name=") == 1:
+                global rname
+                rname = data.replace("name=", '')
+                rname = rname.replace("\r\n", '')
+
+            elif data.find("**clear") == 1:
+                clear_chat()
+
+            else:
+                update_list(self, rname, data)
         except:
             break
 
@@ -228,11 +248,26 @@ class Ui_MoleP2PWindow(object):
     def incomingLoop(s):
         while True:
             data = s.recv(100).decode()
-            update_list(self, rname, data)
+            if data.find("name=") == 1:
+                global rname
+                rname = data.replace("name=", '')
+                rname = rname.replace("\r\n", '')
+
+            elif data.find("**clear") == 1:
+                clear_chat()
+
+            else:
+                update_list(self, rname, data)
 
     def sendMSG(self):
+        if mode == "H":
             text = self.box_sendMessage.text()
             s.send(text.encode())
+            self.box_sendMessage.setText("")
+            update_list(self, name, text)
+        else:
+            text = self.box_sendMessage.text()
+            c.send(text.encode())
             self.box_sendMessage.setText("")
             update_list(self, name, text)
 
@@ -242,6 +277,10 @@ class Ui_MoleP2PWindow(object):
 
     def clear_chat(self):
         self.listWidget.clear()
+        if mode == "H":
+            s.send("**clear".encode())
+        else:
+            c.send("**clear".encode())
 
     def leave_chat(self):
         s.close()
@@ -282,10 +321,16 @@ class Ui_MoleP2PWindow(object):
     def setName(self):
         global name
         name = self.box_enterName.text()
+        if mode == "H":
+            s.send(("name=" + name).encode())
+        else:
+            c.send(("name=" + name).encode())
+            
         msg_box("Success", name + " Has Been Set As Your Name")
 
 
     def host(self):
+        mode = "H"
         ip_address = self.box_enterIP.text()
         port = int(self.box_enterPort.text())
         s.connect((ip_address, port))
@@ -298,6 +343,7 @@ class Ui_MoleP2PWindow(object):
 
 
     def join(self):
+        mode = "J"
         host = ''
         port = int(self.box_enterPort.text())
         msg_box("Ready", "Ready To Join")
