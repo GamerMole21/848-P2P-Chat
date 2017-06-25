@@ -325,11 +325,12 @@ class Ui_MoleP2PWindow(object):
             s.send(("name=" + name).encode())
         else:
             c.send(("name=" + name).encode())
-            
+
         msg_box("Success", name + " Has Been Set As Your Name")
 
 
     def host(self):
+        global mode
         mode = "H"
         ip_address = self.box_enterIP.text()
         port = int(self.box_enterPort.text())
@@ -343,6 +344,7 @@ class Ui_MoleP2PWindow(object):
 
 
     def join(self):
+        global mode
         mode = "J"
         host = ''
         port = int(self.box_enterPort.text())
